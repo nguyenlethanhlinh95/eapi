@@ -9,4 +9,7 @@ composer create-project laravel/laravel laravel_api "5.5.*" --prefer-dist
 ## Create api route
 <ul>
     <li>Route::apiResource('/products', 'ProductController');</li>
+    <li>Route::group(['prefix' => 'products'], function (){
+             Route::apiResource('/{product}/reviews', 'ReviewController');
+        });</li>
 </ul>
