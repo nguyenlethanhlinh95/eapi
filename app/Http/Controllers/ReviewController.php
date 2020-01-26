@@ -12,9 +12,11 @@ class ReviewController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($product_id)
     {
         //
+        $reviews = Review::where('product_id', '=',$product_id )->get();
+        return $reviews ;
     }
 
     /**
@@ -47,6 +49,7 @@ class ReviewController extends Controller
     public function show(Review $review)
     {
         //
+
     }
 
     /**

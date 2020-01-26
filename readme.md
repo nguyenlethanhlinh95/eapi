@@ -50,3 +50,46 @@ class DatabaseSeeder extends Seeder
 
 ## 5. Create a new resource
 php artisan make:resource Product/ProductCollection
+
+<p>- Trong file resource</p>
+public function toArray($request)
+{
+    return [
+        'name' => $this->name,
+        'description' => $this->detail,
+        'price' => $this->price,
+        'stock' => $this->stock,
+        'discount' => $this->discount,
+    ];
+}
+<br><br>
+
+<p>- Trong file controller</p>
+public function index()
+{
+    //
+    $products = Product::all();
+    return ProductResource::collection($products);
+}
+<br><br>
+public function show(Product $product)
+{
+    return new ProductResource($product);
+}
+
+## 5. Có thể thêm mối quan hệ
+
+ public function toArray($request)
+    {
+        return [
+            'name' => $this->name,
+            'description' => $this->detail,
+            'price' => $this->price,
+            'stock' => $this->stock,
+            'discount' => $this->discount,
+            'rating' => $this->reviews->sum('star')/ $this->reviews->count(),
+            'href' => [
+                'revires' => route('reviews.index', $this->id)
+            ]
+        ];
+    }

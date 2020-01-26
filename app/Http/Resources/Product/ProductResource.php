@@ -20,6 +20,11 @@ class ProductResource extends Resource
             'price' => $this->price,
             'stock' => $this->stock,
             'discount' => $this->discount,
+            'totalPrice' => round(((1- ($this->discount/100)) * $this->discount),2),
+            'rating' => $this->reviews->sum('star')/ $this->reviews->count(),
+            'href' => [
+                'revires' => route('reviews.index', $this->id)
+            ]
         ];
     }
 }
