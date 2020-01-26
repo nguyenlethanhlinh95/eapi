@@ -6,7 +6,7 @@ composer create-project laravel/laravel laravel_api "5.5.*" --prefer-dist
     <li>php artisan make:model Model/Revew -a</li>
 </ul>
 
-## Create api route
+## 3. Create api route
 <ul>
     <li>Route::apiResource('/products', 'ProductController');</li>
     <li>Route::group(['prefix' => 'products'], function (){
@@ -14,7 +14,7 @@ composer create-project laravel/laravel laravel_api "5.5.*" --prefer-dist
         });</li>
 </ul>
 
-## Create Seeder
+## 4. Create Seeder
 <ul>
     <li>use Faker\Generator as Faker;
         $factory->define(App\Model\Product::class, function (Faker $faker) {
@@ -47,3 +47,6 @@ class DatabaseSeeder extends Seeder
     }
 }</li>
 </ul>
+
+## 5. Create a new resource
+php artisan make:resource Product/ProductCollection
