@@ -2,13 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Http\Resources\Product\ProductCollection;
 use App\Http\Resources\Product\ProductResource;
 use App\Model\Product;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
-class ProductController extends Controller
+class ProductController extends ApiController
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api')->except('index','show');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -37,9 +45,22 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
         //
+        DB::beginTransaction();
+        try{
+            $formInput = $request->all();
+            $product = Product::create($formInput);
+//
+            DB::commit();
+            return $this->showOne($product,Response::HTTP_CREATED);
+        }
+        catch (\Exception $exception)
+        {
+            DB::rollBack();
+            return $this->errorResponse();
+        }
     }
 
     /**
@@ -50,7 +71,14 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return new ProductResource($product);
+        try{
+            //return new ProductResource($product);
+            return $this->showOne($product);
+        }
+        catch (\Exception $exception)
+        {
+            return $this->errorResponse();
+        }
     }
 
     /**
@@ -74,6 +102,16 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         //
+        try{
+            //return new ProductResource($product);
+            $input = $request->all();
+            $product->fill($input)->save();
+            return $this->showOne($product);
+        }
+        catch (\Exception $exception)
+        {
+            return $this->errorResponse();
+        }
     }
 
     /**
